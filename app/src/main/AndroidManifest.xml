@@ -15,16 +15,18 @@
         android:theme="@style/Theme.StorageMechanicum"
         tools:targetApi="31">
         <activity
-            android:name=".ReadFromLocal"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.StorageMechanicum">
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".StoreToLocal" />
+        <activity android:name=".ReadFromLocal" />
+        <activity android:name=".StoreToExternal" />
+        <activity android:name=".ReadFromExternal" />
     </application>
 
 </manifest>

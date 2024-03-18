@@ -10,7 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.mutableStateOf
 import com.parohy.storagemechanicum.databinding.UseCaseBinding
 
-class ReadFromLocal : ComponentActivity() {
+class StoreToExternal : ComponentActivity() {
   private val binding by lazy { UseCaseBinding.inflate(layoutInflater) }
 
   private val pickImageRequest = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -24,7 +24,7 @@ class ReadFromLocal : ComponentActivity() {
     binding.apply {
       setContentView(root)
 
-      title.text = "Read from app storage"
+      title.text = "Store to External"
 
       button.setOnClickListener {
         pickImageRequest.launch(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI))

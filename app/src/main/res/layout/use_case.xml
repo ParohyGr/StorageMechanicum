@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:gravity="center_horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:textColor="@color/black"
         android:text="Read from local" />
 
     <ImageView
         android:id="@+id/imageView"
+        android:layout_marginTop="24dp"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:background="#A9A9A9" />
 
     <Button
         android:id="@+id/button"
+        android:layout_marginTop="24dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Pick image" />
