@@ -1,16 +1,14 @@
-package com.parohy.storagemechanicum
+package com.parohy.storagemechanicum.ui
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.mutableStateOf
 import com.parohy.storagemechanicum.databinding.UseCaseBinding
 
-class ReadFromExternal : ComponentActivity() {
+class ReadFromLocal : ComponentActivity() {
   private val binding by lazy { UseCaseBinding.inflate(layoutInflater) }
 
   private val pickImageRequest = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -24,7 +22,7 @@ class ReadFromExternal : ComponentActivity() {
     binding.apply {
       setContentView(root)
 
-      title.text = "Read from External"
+      title.text = "Read from app storage"
 
       button.setOnClickListener {
         pickImageRequest.launch(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI))

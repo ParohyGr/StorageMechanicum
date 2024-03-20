@@ -1,18 +1,15 @@
-package com.parohy.storagemechanicum
+package com.parohy.storagemechanicum.ui
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.provider.MediaStore
 import androidx.activity.ComponentActivity
-import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.parohy.storagemechanicum.databinding.ActivityMainBinding
-import com.parohy.storagemechanicum.databinding.UseCaseBinding
 
+/*
+* Android -22
+* Android 23-28
+* Android 29+
+* */
 class MainActivity : ComponentActivity() {
   private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
