@@ -63,12 +63,12 @@ fun Context.cacheFile(inputStream: BufferedInputStream, name: String, directoryN
   return FileProvider.getUriForFile(this, "com.parohy.storagemechanicum.fileprovider", file).also { Log.e("cacheFile", it.toString()) }
 }
 
-fun moveFileToDownloads(context: Context, from: File) {
-  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-    context.contentResolver.downloadPdfFileSDK29(from.name, BufferedInputStream(from.inputStream()))
-  } else
-    context.downloadPdfFile_public(from.name, BufferedInputStream(from.inputStream()))
-}
+//fun moveFileToDownloads(context: Context, from: File) {
+//  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//    context.contentResolver.downloadPdfFileSDK29(from.name, BufferedInputStream(from.inputStream()))
+//  } else
+//    context.downloadPdfFile_public(from.name, BufferedInputStream(from.inputStream()))
+//}
 
 /*Download file to external location*/
 @RequiresApi(Build.VERSION_CODES.Q)
@@ -98,10 +98,8 @@ fun ContentResolver.downloadPdfFileSDK29(name: String, inputStream: BufferedInpu
 * Tu mozu citat subory aj ine aplikacie
 * */
 fun Context.downloadPdfFile_public(name: String, inputStream: BufferedInputStream): Uri {
-  val downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-  downloads.mkdirs()
-
-  val document = File(File(downloads, "Camera"), name)
+  val downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+  val document = File(downloads, name)
 
   if (!document.exists())
     document.createNewFile()

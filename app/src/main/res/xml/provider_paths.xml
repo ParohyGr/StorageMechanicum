@@ -8,7 +8,7 @@
 
 
     <!--externe subory /storage/sdcard/-->
-<!--    <external-path name="downloads" path="." />-->
+    <external-path name="all" path="." />
 
     <!--externe-privatne files /sdcard/Android/data/com.parohy.storagemechanicum/files/>-->
 <!--    <external-files-path name="files" path="." />-->

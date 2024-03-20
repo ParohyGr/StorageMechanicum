@@ -1,9 +1,6 @@
 package com.parohy.storagemechanicum.ui
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
-import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
@@ -21,6 +18,17 @@ import shared.map
 
 class StoreToExternal : ComponentActivity() {
   private val binding by lazy { UseCaseBinding.inflate(layoutInflater) }
+
+  private var callback: ((Boolean) -> Unit)? = null
+  private val requestPermissionContract = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+    callback?.invoke(granted)
+    callback = null
+  }
+
+  private fun withPermission(action: (Boolean) -> Unit) {
+    callback = action
+    requestPermissionContract.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -44,7 +52,9 @@ class StoreToExternal : ComponentActivity() {
       }
 
       button.setOnClickListener {
-        send(Msg.DownloadToExternal)
+        withPermission { granted ->
+          if (granted) send(Msg.DownloadToExternal)
+          else Toast.makeText(this@StoreToExternal, "Permission denied", Toast.LENGTH_SHORT).show()}
       }
     }
   }
