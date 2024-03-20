@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
-    <cache-path name="kasa" path="." />
+    <!--lokalny cache v appstorage /data/data/com.parohy.storagemechanicum/cache/-->
+<!--    <cache-path name="app-cache" path="." />-->
+
+    <!--lokalne files v appstorage /data/data/com.parohy.storagemechanicum/files/-->
+<!--    <files-path name="app-files" path="." />-->
+
+
+    <!--externe subory /storage/sdcard/-->
+<!--    <external-path name="downloads" path="." />-->
+
+    <!--externe-privatne files /sdcard/Android/data/com.parohy.storagemechanicum/files/>-->
+<!--    <external-files-path name="files" path="." />-->
+
+    <!--externe-privatne cache /sdcard/Android/data/com.parohy.storagemechanicum/cache-->
+<!--    <external-cache-path name="external_cache" path="." />-->
+
+    <!--NEVIEM AKO TO POUZIT!-->
+    <!--externe-privatne media /sdcard/Android/data/com.parohy.storagemechanicum/ -->
+<!--    <external-media-path name="external_media" path="."/>-->
 </paths>
