@@ -14,12 +14,14 @@ import shared.toState
 import shared.update
 import shared.worker
 import java.io.BufferedInputStream
+import java.io.FileOutputStream
 
 typealias MutableAppState = MutableAtom<AppState>
 
 sealed interface Msg : BaseMsg {
   data object DownloadToLocal    : Msg
   data object DownloadToExternal : Msg
+  data class DownloadToExternalSAF(val uri: Uri) : Msg
   data object ReadFromLocal      : Msg
   data object ReadFromExternal   : Msg
 }
@@ -50,6 +52,24 @@ suspend fun MutableAppState.updateAppState(msg: BaseMsg, context: Context) = whe
         consume = { inS: BufferedInputStream ->
 //          context.downloadPdfFile_private("image_external_private.jpg", inS)
           context.downloadPdfFile_public("image_external_public.jpg", inS)
+        }
+      )
+    }
+    update { copy(downloadExternal = result.toState()) }
+  }
+
+  is Msg.DownloadToExternalSAF -> {
+    update { copy(downloadExternal = Loading) }
+    val result = worker {
+      httpClient.download(
+        request = httpGet("https://fossbytes.com/wp-content/uploads/2017/10/android-eats-apple.jpg".toHttpUrl()),
+        consume = { inS: BufferedInputStream ->
+//          context.downloadPdfFile_private("image_external_private.jpg", inS)
+          val outS = context.contentResolver.openFileDescriptor(msg.uri, "w")?.fileDescriptor?.let(::FileOutputStream)
+          outS?.write(inS.readBytes())
+          outS?.close()
+
+          msg.uri
         }
       )
     }

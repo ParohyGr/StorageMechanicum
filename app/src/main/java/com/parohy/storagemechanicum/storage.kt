@@ -98,7 +98,7 @@ fun ContentResolver.downloadPdfFileSDK29(name: String, inputStream: BufferedInpu
 * Tu mozu citat subory aj ine aplikacie
 * */
 fun Context.downloadPdfFile_public(name: String, inputStream: BufferedInputStream): Uri {
-  val downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+  val downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
   val document = File(downloads, name)
 
   if (!document.exists())
