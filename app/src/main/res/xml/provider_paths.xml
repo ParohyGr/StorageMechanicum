@@ -8,6 +8,7 @@
 
 
     <!--externe subory /storage/sdcard/-->
+    <!--externe subory /storage/emulated/0/-->
     <external-path name="all" path="." />
 
     <!--externe-privatne files /sdcard/Android/data/com.parohy.storagemechanicum/files/>-->

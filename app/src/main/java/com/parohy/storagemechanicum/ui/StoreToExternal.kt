@@ -1,5 +1,6 @@
 package com.parohy.storagemechanicum.ui
 
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -26,8 +27,10 @@ class StoreToExternal : ComponentActivity() {
   }
 
   private fun withPermission(action: (Boolean) -> Unit) {
-    callback = action
-    requestPermissionContract.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+      callback = action
+      requestPermissionContract.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    } else action(true)
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {

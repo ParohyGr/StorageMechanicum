@@ -76,7 +76,7 @@ fun ContentResolver.downloadPdfFileSDK29(name: String, inputStream: BufferedInpu
   val values = ContentValues().apply {
     put(MediaStore.Downloads.DISPLAY_NAME, name)
     put(MediaStore.Downloads.MIME_TYPE, "application/pdf")
-    put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+    put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
   }
 
   val downloadCollection = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL)
