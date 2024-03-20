@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
 import java.io.BufferedInputStream
@@ -41,7 +42,7 @@ import java.io.FileOutputStream
 * */
 fun Context.cacheFile(inputStream: BufferedInputStream, name: String, directoryName: String? = null): Uri {
   val path = if (directoryName != null) {
-    val dir = File(cacheDir.path, directoryName)
+    val dir = File(cacheDir, directoryName)
     if (!dir.exists()) dir.mkdirs()
     dir.path
   } else
@@ -58,14 +59,15 @@ fun Context.cacheFile(inputStream: BufferedInputStream, name: String, directoryN
     } while (inputStream.read(buffer) != -1)
   }
 
-  return FileProvider.getUriForFile(this, "com.parohy.storagemechanicum.fileprovider", file)
+  Uri.fromFile(file).also { Log.e("cacheFile", it.toString()) } // stary sposob. Na novsich android to uz nefunguje kvoli "bezpecnosti"
+  return FileProvider.getUriForFile(this, "com.parohy.storagemechanicum.fileprovider", file).also { Log.e("cacheFile", it.toString()) }
 }
 
 fun moveFileToDownloads(context: Context, from: File) {
   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
     context.contentResolver.downloadPdfFileSDK29(from.name, BufferedInputStream(from.inputStream()))
   } else
-    context.downloadPdfFile(from.name, BufferedInputStream(from.inputStream()))
+    context.downloadPdfFile_public(from.name, BufferedInputStream(from.inputStream()))
 }
 
 /*Download file to external location*/
@@ -91,9 +93,19 @@ fun ContentResolver.downloadPdfFileSDK29(name: String, inputStream: BufferedInpu
   values.clear()
 }
 
-fun Context.downloadPdfFile(name: String, inputStream: BufferedInputStream): Uri {
-  val downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-  val document = File(downloads.toString(), name)
+/*
+* Pristupujem k verejnému externemu úložisku
+* Tu mozu citat subory aj ine aplikacie
+* */
+fun Context.downloadPdfFile_public(name: String, inputStream: BufferedInputStream): Uri {
+  val downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+  downloads.mkdirs()
+
+  val document = File(File(downloads, "Camera"), name)
+
+  if (!document.exists())
+    document.createNewFile()
+
   val buffer = ByteArray(1024)
   document.outputStream().use { stream ->
     inputStream.read(buffer)
@@ -101,5 +113,31 @@ fun Context.downloadPdfFile(name: String, inputStream: BufferedInputStream): Uri
       stream.write(buffer)
     } while (inputStream.read(buffer) != -1)
   }
-  return FileProvider.getUriForFile(this, "com.parohy.storagemechanicum.fileprovider", document)
+
+  Uri.fromFile(document).also { Log.e("downloadPdfFile", it.toString()) } // stary sposob. Na novsich android to uz nefunguje kvoli "bezpecnosti"
+  return FileProvider.getUriForFile(this, "com.parohy.storagemechanicum.fileprovider", document).also { Log.e("downloadPdfFile", it.toString()) }
+}
+
+/*
+* Pristupujem k privátnemu externemu úložisku
+* Tu moze citat subory len moja aplikacia
+* */
+fun Context.downloadPdfFile_private(name: String, inputStream: BufferedInputStream): Uri {
+  val downloads = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+  val document = File(downloads, name)
+
+  if (!document.exists())
+    document.createNewFile()
+
+  val buffer = ByteArray(1024)
+  document.outputStream().use { stream ->
+    inputStream.read(buffer)
+    do {
+      stream.write(buffer)
+    } while (inputStream.read(buffer) != -1)
+  }
+
+  Uri.fromFile(document).also { Log.e("downloadPdfFile", it.toString()) } // stary sposob. Na novsich android to uz nefunguje kvoli "bezpecnosti"
+  return FileProvider.getUriForFile(this, "com.parohy.storagemechanicum.fileprovider", document).also { Log.e("downloadPdfFile", it.toString()) }
 }

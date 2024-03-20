@@ -25,7 +25,7 @@ class ReadFromLocal : ComponentActivity() {
       title.text = "Read from app storage"
 
       button.setOnClickListener {
-        pickImageRequest.launch(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI))
+        pickImageRequest.launch(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI))
       }
     }
   }
