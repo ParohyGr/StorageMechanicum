@@ -20,8 +20,6 @@ typealias MutableAppState = MutableAtom<AppState>
 sealed interface Msg : BaseMsg {
   data object DownloadToLocal    : Msg
   data object DownloadToExternal : Msg
-  data object ReadFromLocal      : Msg
-  data object ReadFromExternal   : Msg
 }
 
 data class AppState(
@@ -48,8 +46,8 @@ suspend fun MutableAppState.updateAppState(msg: BaseMsg, context: Context) = whe
       httpClient.download(
         request = httpGet("https://fossbytes.com/wp-content/uploads/2017/10/android-eats-apple.jpg".toHttpUrl()),
         consume = { inS: BufferedInputStream ->
-          context.downloadPdfFile_private("image_external_private.jpg", inS)
-//          context.downloadPdfFile_public("image_external_public.jpg", inS)
+//          context.downloadPdfFile_private("image_external_private.jpg", inS)
+          context.downloadPdfFile_public("image_external_public.jpg", inS)
         }
       )
     }
