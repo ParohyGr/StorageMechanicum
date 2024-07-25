@@ -23,6 +23,7 @@ class MainActivity : ComponentActivity() {
       readLocal.setOnClickListener { startActivity(Intent(this@MainActivity, ReadFromLocal::class.java)) }
       storeExternal.setOnClickListener { startActivity(Intent(this@MainActivity, StoreToExternal::class.java)) }
       readExternal.setOnClickListener { startActivity(Intent(this@MainActivity, ReadFromExternal::class.java)) }
+      scopedStorage.setOnClickListener { startActivity(Intent(this@MainActivity, ScopedStorage::class.java)) }
     }
   }
 }

@@ -1,7 +1,10 @@
 package com.parohy.storagemechanicum
 
+import android.content.ContentValues
 import android.content.Context
 import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import shared.ApiError
 import shared.BaseMsg
@@ -15,6 +18,7 @@ import shared.update
 import shared.worker
 import java.io.BufferedInputStream
 import java.io.FileOutputStream
+import java.io.IOException
 
 typealias MutableAppState = MutableAtom<AppState>
 
@@ -22,6 +26,7 @@ sealed interface Msg : BaseMsg {
   data object DownloadToLocal    : Msg
   data object DownloadToExternal : Msg
   data class DownloadToExternalSAF(val uri: Uri) : Msg
+  data object DownloadImageToScopedStorage : Msg
   data object ReadFromLocal      : Msg
   data object ReadFromExternal   : Msg
 }
@@ -75,5 +80,40 @@ suspend fun MutableAppState.updateAppState(msg: BaseMsg, context: Context) = whe
     }
     update { copy(downloadExternal = result.toState()) }
   }
+
+  is Msg.DownloadImageToScopedStorage -> {
+    val result = worker {
+      httpClient.download(
+        request = httpGet("https://fossbytes.com/wp-content/uploads/2017/10/android-eats-apple.jpg".toHttpUrl()),
+        consume = { inS: BufferedInputStream ->
+          val imagesUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+          else
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+
+          val contentValues = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, "image_scoped_storage.jpg")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+//                put(MediaStore.Images.Media.WIDTH, 0)
+//                put(MediaStore.Images.Media.HEIGHT, 0)
+          }
+
+          try {
+            context.contentResolver.insert(imagesUri, contentValues)?.also { uri ->
+              context.contentResolver.openOutputStream(uri).use { outS ->
+                outS?.write(inS.readBytes())
+                outS?.close()
+              }
+            } ?: throw IOException("Couldn't create MediaStore entry")
+          } catch (e: IOException) {
+            e.printStackTrace()
+            null
+          }
+        }
+      )
+    }
+    update { copy(downloadExternal = result.toState()) }
+  }
+
   else -> TODO("Baram buc")
 }
